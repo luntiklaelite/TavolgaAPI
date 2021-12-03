@@ -2,8 +2,8 @@
 
 namespace TavolgaAPI.Models.Entityes.Users
 {
-    [Table("AdminUsers")]
-    public class AdminUser:BaseUser
+    [Table("ValuatorBases")]
+    public class ValuatorBase:BaseUser
     {
     }
 }

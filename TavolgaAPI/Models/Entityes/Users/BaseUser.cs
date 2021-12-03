@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TavolgaAPI.Models.Entityes.Users
 {
+    [Table("BaseUsers")]
     public abstract class BaseUser
     {
         [Key]

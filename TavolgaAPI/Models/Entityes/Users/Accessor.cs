@@ -1,6 +1,11 @@
-﻿namespace TavolgaAPI.Models.Entityes.Users
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TavolgaAPI.Models.Entityes.Users
 {
-    public class Accessor:BaseUser
+    [Table("Accessors")]
+    public class Accessor: ValuatorBase
     {
+        public List<ContestantScore> contestantScores { get; set; }
     }
 }
