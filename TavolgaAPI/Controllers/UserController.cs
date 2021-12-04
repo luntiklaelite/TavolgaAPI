@@ -17,18 +17,19 @@ namespace TavolgaAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-
-        private EfModel _dbContext;
-        public UserController(EfModel dbContext) {
-            _dbContext = dbContext;
+        EfModel DbModel;
+        public UserController(EfModel model)
+        {
+            this.DbModel = model;
         }
+        
         /// <summary>
         /// Может просматривать информацию о себе (ФИО участника, фото, оцениваемые параметры, результаты участника на предыдущих этапах);
         /// </summary>
         [HttpGet("GetSelfInformation")]
-        public void GetSelfInformation()
+        public BaseUser GetSelfInformation(int id)
         {
-
+            return DbModel.Contestants.FirstOrDefault(c => c.Id == id);
         }
         /// <summary>
         /// Может изменять свою фотографию;
@@ -76,7 +77,7 @@ namespace TavolgaAPI.Controllers
 
         private ClaimsIdentity GetIdentity(string email, string password)
         {
-            BaseUser user = _dbContext.BaseUsers.FirstOrDefault(x => x.Email == email && x.Password == password);
+            BaseUser user = DbModel.BaseUsers.FirstOrDefault(x => x.Email == email && x.Password == password);
             if (user != null)
             {
                 var claims = new List<Claim>
