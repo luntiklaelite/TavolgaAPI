@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TavolgaAPI.Models;
+using TavolgaAPI.Models.Entityes.Users;
 
 namespace TavolgaAPI.Controllers
 {
@@ -11,13 +13,19 @@ namespace TavolgaAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        EfModel DbModel;
+        public UserController(EfModel model)
+        {
+            this.DbModel = model;
+        }
+
         /// <summary>
         /// Может просматривать информацию о себе (ФИО участника, фото, оцениваемые параметры, результаты участника на предыдущих этапах);
         /// </summary>
         [HttpGet("GetSelfInformation")]
-        public void GetSelfInformation()
+        public BaseUser GetSelfInformation(int id)
         {
-
+            return DbModel.Contestants.FirstOrDefault(c => c.Id == id);
         }
         /// <summary>
         /// Может изменять свою фотографию;

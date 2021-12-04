@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TavolgaAPI.Models;
+using TavolgaAPI.Models.Entityes.Users;
 
 namespace TavolgaAPI.Controllers
 {
@@ -16,13 +18,19 @@ namespace TavolgaAPI.Controllers
     [ApiController]
     public class ContestantController : ControllerBase
     {
+        EfModel DbModel;
+        public ContestantController(EfModel model)
+        {
+            this.DbModel = model;
+        }
+
         /// <summary>
         /// Возвращает участника, наверное только для участника
         /// </summary>
         [HttpGet("GetContestant")]
-        public void GetContestant()
+        public Contestant GetContestant(int contestantId)
         {
-
+            return DbModel.Contestants.FirstOrDefault(c => c.Id == contestantId);
         }
 
         /// <summary>
