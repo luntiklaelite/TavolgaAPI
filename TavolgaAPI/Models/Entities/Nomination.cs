@@ -10,11 +10,13 @@ namespace TavolgaAPI.Models.Entityes
     {
         [Key]
         public int Id { get; set; }
-        [Required, MaxLength(64)]
+        [Required, MaxLength(128)]
         public string Name { get; set; }
+        [MaxLength(1024)]
         public string Description { get; set; }
-        public Event Event { get; set; }
-        public List<Criteria> Criteries { get; set; } = new List<Criteria>();
-        public List<ValuatorBase> Valuators { get; set; } = new List<ValuatorBase>();
+        [Required]
+        public virtual Event Event { get; set; }
+        public virtual List<Criteria> Criteries { get; set; } = new List<Criteria>();
+        public virtual List<ValuatorBase> Valuators { get; set; } = new List<ValuatorBase>();
     }
 }
