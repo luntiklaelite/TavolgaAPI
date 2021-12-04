@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -9,10 +10,13 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using TavolgaAPI.Core;
 using TavolgaAPI.Models;
+using TavolgaAPI.Extensions;
 using TavolgaAPI.Models.Entityes.Users;
+using TavolgaAPI.Models.DTOs;
 
 namespace TavolgaAPI.Controllers
 {
+    [Authorize]
     [Route("api/Account")]
     [ApiController]
     public class UserController : ControllerBase
@@ -27,9 +31,10 @@ namespace TavolgaAPI.Controllers
         /// Может просматривать информацию о себе (ФИО участника, фото, оцениваемые параметры, результаты участника на предыдущих этапах);
         /// </summary>
         [HttpGet("GetSelfInformation")]
-        public BaseUser GetSelfInformation(int id)
+        public BaseUser GetSelfInformation()
         {
-            return DbModel.Contestants.FirstOrDefault(c => c.Id == id);
+            int userId = this.GetCurrentUserId();
+            return DbModel.BaseUsers.FirstOrDefault(c => c.Id == userId);
         }
         /// <summary>
         /// Может изменять свою фотографию;
@@ -37,20 +42,17 @@ namespace TavolgaAPI.Controllers
         [HttpPost("ChangeSelfPhoto")]
         public void ChangeSelfPhoto()
         {
-           /* var identity = HttpContext.User.Identity as ClaimsIdentity;
-            if (identity == null)
-                return BadRequest("User not Found!");
-
-            Convert.ToInt32(identity.FindFirst("UserId").Value);*/
+            
         }
 
+        [AllowAnonymous]
         [HttpPost]
-        public object Auth(string email, string password)
+        public IActionResult Auth([FromBody] AuthorizationModel auth)
         {
-            var identity = GetIdentity(email, password);
+            var identity = GetIdentity(auth.Email, auth.Password);
             if (identity == null)
             {
-                return BadRequest(new { errorText = "Invalid username or password." });
+                return BadRequest("Invalid username or password");
             }
 
             var now = DateTime.UtcNow;
@@ -69,12 +71,14 @@ namespace TavolgaAPI.Controllers
             {
                 access_token = encodedJwt,
                 expires = expies,
-                username = identity.Name
+                username = identity.Name,
+                role = identity.FindFirst(ClaimsIdentity.DefaultRoleClaimType).Value
             };
 
-            return response;
+            return Ok(response);
         }
 
+        [NonAction]
         private ClaimsIdentity GetIdentity(string email, string password)
         {
             BaseUser user = DbModel.BaseUsers.FirstOrDefault(x => x.Email == email && x.Password == password);
@@ -83,6 +87,7 @@ namespace TavolgaAPI.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, user.FIO),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString()),
                     new Claim("UserId", user.Id.ToString())
                 };
                 ClaimsIdentity claimsIdentity =

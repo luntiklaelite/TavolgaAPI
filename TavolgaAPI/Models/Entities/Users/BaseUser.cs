@@ -15,5 +15,6 @@ namespace TavolgaAPI.Models.Entityes.Users
         public string Email { get; set; }
         [Required, MaxLength(32)]
         public string Password { get; set; }
+        public virtual string Role => "Base";
     }
 }
