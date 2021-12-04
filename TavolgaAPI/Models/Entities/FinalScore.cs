@@ -14,11 +14,13 @@ namespace TavolgaAPI.Models.Entityes
         [Required]
         public int Score { get; set; }
         [ForeignKey("ContestantId")]
-        public Contestant contestant { get; set; }
+        public virtual Contestant contestant { get; set; }
         [ForeignKey("CriteriaId")]
-        public Criteria Criteria { get; set; }
+        public virtual Criteria Criteria { get; set; }
         [Required]
-        public Jury Juri { get; set; }
+        public bool IsAccepted { get; set; }
+        [Required]
+        public virtual Jury Juri { get; set; }
         [Required]
         public int Position { get; set; }
     }

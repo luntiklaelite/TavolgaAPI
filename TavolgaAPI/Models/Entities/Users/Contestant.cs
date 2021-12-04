@@ -6,6 +6,6 @@ namespace TavolgaAPI.Models.Entityes.Users
     [Table("Contestants")]
     public class Contestant : BaseUser
     {
-        public virtual List<ContestantScore> ContestantScores { get; set; }
+        public virtual List<ContestantScore> ContestantScores { get; set; } = new List<ContestantScore>();
     }
 }
