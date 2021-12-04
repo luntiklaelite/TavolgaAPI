@@ -27,5 +27,11 @@ namespace TavolgaAPI.Controllers
         {
 
         }
+
+        [HttpPost]
+        public void Auth(string email, string password)
+        { 
+            
+        }
     }
 }

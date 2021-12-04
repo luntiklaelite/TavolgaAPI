@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TavolgaAPI.Models.Entityes.Users;
 
 namespace TavolgaAPI.Models.Entityes
 {
@@ -14,5 +15,6 @@ namespace TavolgaAPI.Models.Entityes
         public string Description { get; set; }
         public Event Event { get; set; }
         public List<Criteria> Criteries { get; set; } = new List<Criteria>();
+        public List<ValuatorBase> Valuators { get; set; } = new List<ValuatorBase>();
     }
 }

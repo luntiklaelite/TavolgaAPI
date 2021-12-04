@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TavolgaAPI.Models;
+using TavolgaAPI.Models.Entityes;
 
 namespace TavolgaAPI.Controllers
 {
@@ -11,13 +13,18 @@ namespace TavolgaAPI.Controllers
     [ApiController]
     public class NominationController : ControllerBase
     {
+        EfModel model;
+        public NominationController(EfModel model)
+        {
+            this.model = model;
+        }
         /// <summary>
         /// Возвращает доступные для жюри/ассессора номинации
         /// </summary>
         [HttpGet("GetAvailableNominations")]
-        public void GetAvailableNominations()
+        public IEnumerable<Nomination> GetAvailableNominations()
         {
-
+            return model.Nominations;
         }
 
         /// <summary>
