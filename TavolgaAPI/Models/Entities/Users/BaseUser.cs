@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TavolgaAPI.Models.Entityes.Users
 {
-    public abstract class BaseUser
+    [Table("BaseUser")]
+    public class BaseUser
     {
         [Key]
         public int Id { get; set; }
@@ -12,6 +14,6 @@ namespace TavolgaAPI.Models.Entityes.Users
         [Required, MaxLength(64)]
         public string Email { get; set; }
         [Required, MaxLength(32)]
-        public string Password { get; set; }        
+        public string Password { get; set; }
     }
 }

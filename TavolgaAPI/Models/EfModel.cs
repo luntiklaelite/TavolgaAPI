@@ -16,8 +16,10 @@ namespace TavolgaAPI.Models
             modelBuilder.Entity<FinalScore>().HasKey(fs => new { fs.ContestantId, fs.CriteriaId });
         }
         public virtual DbSet<Accessor> Accessors { get; set; }
+        public virtual DbSet<BaseUser> BaseUsers { get; set; }
         public virtual DbSet<AdminUser> AdminUsers { get; set; }
         public virtual DbSet<Contestant> Contestants { get; set; }
+        public virtual DbSet<ValuatorBase> ValuatorBases { get; set; }
         public virtual DbSet<Jury> Juries { get; set; }
         public virtual DbSet<ContestantScore> ContestantScores { get; set; }
         public virtual DbSet<Criteria> Criteria { get; set; }
