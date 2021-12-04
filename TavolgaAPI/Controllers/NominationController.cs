@@ -13,18 +13,42 @@ namespace TavolgaAPI.Controllers
     [ApiController]
     public class NominationController : ControllerBase
     {
-        EfModel model;
+        EfModel DbModel;
         public NominationController(EfModel model)
         {
-            this.model = model;
+            this.DbModel = model;
         }
         /// <summary>
-        /// Возвращает доступные для жюри/ассессора номинации
+        /// Добавить номинацию
         /// </summary>
-        [HttpGet("GetAvailableNominations")]
-        public IEnumerable<Nomination> GetAvailableNominations()
+        /// <returns></returns>
+        /// 
+        [HttpPost]
+        public IActionResult AddNomination(int eventId, Nomination nomination)
         {
-            return model.Nominations;
+            nomination.Event = DbModel.Events.FirstOrDefault(e => e.Id == eventId);
+            if (nomination.Event == null)
+                return BadRequest("Такого мероприятия не существует!");
+            DbModel.Nominations.Add(nomination);
+            return Ok(nomination);
+        }
+
+        /// <summary>
+        /// Удаляет номинацию
+        /// </summary>
+        /// <param name="nominationId"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public IActionResult DeleteNomination(int nominationId)
+        {
+            try
+            {
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
@@ -35,5 +59,16 @@ namespace TavolgaAPI.Controllers
         {
 
         }
+
+        /// <summary>
+        /// Возвращает доступные для жюри/ассессора номинации
+        /// </summary>
+        [HttpGet("GetAvailableNominations")]
+        public IEnumerable<Nomination> GetAvailableNominations()
+        {
+            return DbModel.Nominations;
+        }
+
+        
     }
 }
