@@ -53,7 +53,8 @@ namespace TavolgaAPI
 
             services.AddSingleton<ImageRepository>();
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TavolgaAPI", Version = "v1" });

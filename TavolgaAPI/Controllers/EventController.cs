@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TavolgaAPI.Models;
+using TavolgaAPI.Models.DTOs;
 using TavolgaAPI.Models.Entityes;
 
 namespace TavolgaAPI.Controllers
@@ -21,13 +22,33 @@ namespace TavolgaAPI.Controllers
             this.DbModel = model;
         }
 
+
+        /// <summary>
+        /// Возвращает мероприятия (ПОЛНОЕ ДЕРЕВО)
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
-        [HttpGet("GetAll")]
-        public List<Event> GetAllEvents()
+        [HttpGet("GetAllFull")]
+        public List<Event> GetAllFullEvents()
         {
             return DbModel.Events
                 .Include(i => i.Nominations)
                     .ThenInclude(i => i.Criteries).ToList();
+        }
+
+        /// <summary>
+        /// Возвращает мероприятия (ПОЛНОЕ ДЕРЕВО)
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("GetAll")]
+        public IEnumerable<EventDto> GetAllEvents()
+        {
+            return DbModel.Events.Select(s => new EventDto
+            {
+                Id = s.Id,
+                Name = s.Name
+            });
         }
     }
 }

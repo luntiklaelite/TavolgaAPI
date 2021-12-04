@@ -84,11 +84,11 @@ namespace TavolgaAPI.Controllers
         }
 
         /// <summary>
-        /// Возвращает доступные для жюри/ассессора номинации
+        /// Возвращает доступные для жюри/ассессора номинации (ПОЛНОЕ ДЕРЕВО)
         /// </summary>
         [Authorize(Roles = "Jury,Accessor")]
-        [HttpGet("GetAvailableNominations")]
-        public IEnumerable<Nomination> GetAvailableNominations()
+        [HttpGet("GetAvailableFullNominations")]
+        public IEnumerable<Nomination> GetAvailableFullNominations()
         {
             int userId = this.GetCurrentUserId();
             return DbModel.ValuatorBases
@@ -99,7 +99,33 @@ namespace TavolgaAPI.Controllers
                 .Include(i => i.Nominations)
                     .ThenInclude(i => i.Criteries)
                         .ThenInclude(i => i.FinalScores)
+                .Include(i => i.Nominations)
+                    .ThenInclude(i => i.Event)
                 .FirstOrDefault(v => v.Id == userId).Nominations;
+        }
+
+        /// <summary>
+        /// Возвращает доступные для жюри/ассессора номинации (DTO)
+        /// </summary>
+        [Authorize(Roles = "Jury,Accessor")]
+        [HttpGet("GetAvailableNominations")]
+        public IEnumerable<NominationDto> GetAvailableNominations()
+        {
+            int userId = this.GetCurrentUserId();
+            return DbModel.ValuatorBases
+                .Include(i => i.Nominations)
+                    .ThenInclude(i => i.Event)
+                .FirstOrDefault(v => v.Id == userId).Nominations.Select(s => new NominationDto
+                {
+                    Id = s.Id,
+                    Description = s.Description,
+                    Name = s.Name,
+                    Event = new EventDto
+                    {
+                        Id = s.Event.Id,
+                        Name = s.Event.Name
+                    }
+                });
         }
     }
 }
