@@ -34,6 +34,7 @@ namespace TavolgaAPI.Controllers
             if (nomination.Event == null)
                 return BadRequest("Такого мероприятия не существует!");
             DbModel.Nominations.Add(nomination);
+            DbModel.SaveChanges();
             return Ok(nomination);
         }
 
@@ -48,6 +49,7 @@ namespace TavolgaAPI.Controllers
         {
             try
             {
+                DbModel.Nominations.Remove(DbModel.Nominations.FirstOrDefault(n => n.Id == nominationId));
                 return Ok();
             }
             catch(Exception e)
@@ -56,15 +58,6 @@ namespace TavolgaAPI.Controllers
             }
         }
 
-        ///// <summary>
-        ///// Изменить номинацию
-        ///// </summary>
-        //[Authorize(Roles = "Admin")]
-        //[HttpPut]
-        //public void ChangeNomination()
-        //{
-
-        //}
         [Authorize(Roles = "Jury,Accessor")]
         [HttpPut("ChangeAvailableNominations")]
         public IActionResult ChangeAvailableNominations([FromBody] EventNominationId event_nomination)

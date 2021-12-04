@@ -16,7 +16,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using TavolgaAPI.Core;
 using TavolgaAPI.Models;
+using TavolgaAPI.Models.Other;
 using TavolgaAPI.Repositories;
+using TavolgaAPI.Services;
 
 namespace TavolgaAPI
 {
@@ -48,6 +50,8 @@ namespace TavolgaAPI
                             ValidateIssuerSigningKey = true,
                        };
                    });
+            services.Configure<EmailSenderData>(Configuration.GetSection("EmailSender"));
+            services.AddSingleton<EmailService>();
             string connectionstr = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<EfModel>(option => option.UseMySql(connectionstr, ServerVersion.AutoDetect(connectionstr)));
 
@@ -70,10 +74,9 @@ namespace TavolgaAPI
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TavolgaAPI v1"));
-           // }
+            // }
 
             //app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseAuthentication();

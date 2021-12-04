@@ -14,6 +14,9 @@ using TavolgaAPI.Extensions;
 using TavolgaAPI.Models.Entityes.Users;
 using TavolgaAPI.Models.DTOs;
 using TavolgaAPI.Repositories;
+using System.Security.Cryptography;
+using System.Text;
+using TavolgaAPI.Services;
 
 namespace TavolgaAPI.Controllers
 {
@@ -24,10 +27,12 @@ namespace TavolgaAPI.Controllers
     {
         private readonly EfModel DbModel;
         private readonly ImageRepository _imageRepository;
-        public UserController(EfModel model, ImageRepository imageRepository)
+        private readonly EmailService _emailService;
+        public UserController(EfModel model, ImageRepository imageRepository, EmailService emailService)
         {
             this.DbModel = model;
             this._imageRepository = imageRepository;
+            this._emailService = emailService;
         }
         
         /// <summary>
@@ -56,6 +61,32 @@ namespace TavolgaAPI.Controllers
             _imageRepository.ChangeUserImage(userId, imgBytes);
         }
 
+        [AllowAnonymous]
+        [HttpPost("Register")]
+        public IActionResult Register([FromBody] BaseUser user)
+        {
+            if (DbModel.BaseUsers.Any(u => u.Email == user.Email))
+                return BadRequest("Пользователь с таким email уже сущестует");
+            DbModel.Contestants.Add(new Contestant
+            {
+                FIO = user.FIO,
+                Email = user.Email,
+                Password = GetMD5String(user.Password)
+            });
+            DbModel.SaveChanges();
+            _emailService.SendMessage(user.Email, "Регистрация в платформе Таволга", "Здравствуйте! Вы были зарегестрировваны на конкурсной платформе \"Таволга\"."
+                + "\nВаши данные для входа:"
+                + "\nЛогин (Email): " + user.Email
+                + "\nПароль: " + user.Password);
+            return Ok();
+        }
+
+        [NonAction]
+        private string GetMD5String(string value)
+        {
+            var hashes = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(value)).Select(b => b.ToString("x2"));
+            return string.Concat(hashes);
+        }
 
         [AllowAnonymous]
         [HttpPost]
