@@ -16,6 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TavolgaAPI.Core;
 using TavolgaAPI.Models;
+using TavolgaAPI.Repositories;
 
 namespace TavolgaAPI
 {
@@ -49,7 +50,9 @@ namespace TavolgaAPI
                    });
             string connectionstr = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<EfModel>(option => option.UseMySql(connectionstr, ServerVersion.AutoDetect(connectionstr)));
-            
+
+            services.AddSingleton<ImageRepository>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

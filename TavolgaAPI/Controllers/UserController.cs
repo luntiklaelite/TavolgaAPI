@@ -13,6 +13,7 @@ using TavolgaAPI.Models;
 using TavolgaAPI.Extensions;
 using TavolgaAPI.Models.Entityes.Users;
 using TavolgaAPI.Models.DTOs;
+using TavolgaAPI.Repositories;
 
 namespace TavolgaAPI.Controllers
 {
@@ -21,10 +22,12 @@ namespace TavolgaAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        EfModel DbModel;
-        public UserController(EfModel model)
+        private readonly EfModel DbModel;
+        private readonly ImageRepository _imageRepository;
+        public UserController(EfModel model, ImageRepository imageRepository)
         {
             this.DbModel = model;
+            this._imageRepository = imageRepository;
         }
         
         /// <summary>
@@ -37,13 +40,22 @@ namespace TavolgaAPI.Controllers
             return DbModel.BaseUsers.FirstOrDefault(c => c.Id == userId);
         }
         /// <summary>
-        /// Может изменять свою фотографию;
+        /// Возвращает фотографию пользователя
         /// </summary>
-        [HttpPost("ChangeSelfPhoto")]
-        public void ChangeSelfPhoto()
+        [HttpGet("GetSelfPhoto")]
+        public byte[] GetSelfPhoto()
         {
-            
+            int userId = this.GetCurrentUserId();
+            return _imageRepository.GetUserImage(userId);
         }
+
+        [HttpPost("ChangeSelfPhoto")]
+        public void ChangeSelfPhoto(byte[] imgBytes)
+        {
+            int userId = this.GetCurrentUserId();
+            _imageRepository.ChangeUserImage(userId, imgBytes);
+        }
+
 
         [AllowAnonymous]
         [HttpPost]

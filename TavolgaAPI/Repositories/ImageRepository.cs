@@ -10,10 +10,19 @@ namespace TavolgaAPI.Repositories
 {
     public class ImageRepository
     {
+        public ImageRepository()
+        {
+            if (!Directory.Exists(ImageDir))
+                Directory.CreateDirectory(ImageDir);
+        }
         const string ImageDir = "images/users/";
         public byte[] GetUserImage(int userId)
         {
-            return File.ReadAllBytes($"{ImageDir}{userId}.jpg");
+            var path = $"{ImageDir}{userId}.jpg";
+            if (File.Exists(path))
+                return File.ReadAllBytes($"{ImageDir}{userId}.jpg");
+            else
+                return null;
         }
         public void ChangeUserImage(int userId, byte[] imgBytes)
         {
