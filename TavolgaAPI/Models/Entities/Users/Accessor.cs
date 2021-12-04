@@ -7,5 +7,6 @@ namespace TavolgaAPI.Models.Entityes.Users
     public class Accessor: ValuatorBase
     {
         public virtual List<ContestantScore> contestantScores { get; set; }
+        public override string Role => "Accessor";
     }
 }

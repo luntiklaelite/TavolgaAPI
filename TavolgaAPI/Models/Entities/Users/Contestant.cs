@@ -7,5 +7,6 @@ namespace TavolgaAPI.Models.Entityes.Users
     public class Contestant : BaseUser
     {
         public virtual List<ContestantScore> ContestantScores { get; set; } = new List<ContestantScore>();
+        public override string Role => "Contestant";
     }
 }

@@ -7,5 +7,6 @@ namespace TavolgaAPI.Models.Entityes.Users
     public class Jury : ValuatorBase
     {
         public virtual List<FinalScore> FinalScores { get; set; } = new List<FinalScore>();
+        public override string Role => "Jury";
     }
 }
