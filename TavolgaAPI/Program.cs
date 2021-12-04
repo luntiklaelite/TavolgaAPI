@@ -21,7 +21,7 @@ namespace TavolgaAPI
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("https://0.0.0.0:5003");
+                    webBuilder.UseUrls("http://0.0.0.0:5003");
                 });
     }
 }

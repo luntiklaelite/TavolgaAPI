@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\Users\Администратор\Desktop\123</_PublishTargetUrl>
+    <History>True|2021-12-04T13:32:40.9254246Z;True|2021-12-04T16:37:34.9158062+04:00;True|2021-12-04T16:34:42.3854981+04:00;</History>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Server=cfif31.ru%3bPort=3306%3bDatabase=api_tavolga%3bUser Id=api_tavolga%3bPassword=yqc7YBByap3ZPgRn4MAnL4JW2aWQ8F9S%3bCharSet=utf8%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>
